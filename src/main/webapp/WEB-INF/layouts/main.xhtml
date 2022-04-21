@@ -18,7 +18,7 @@
                 <p:menubar>
                     <p:menuitem value="#{msg['menu.item.inicio']}" outcome="index" icon="pi pi-fw pi-home"/>
                     <p:menuitem rendered="#{p:ifGranted('ADMIN')}" value="#{msg['menu.item.crear']}" onclick="PF('dialogForm').show()" icon="pi pi-fw pi-plus"/>
-                    <p:menuitem rendered="#{p:ifAnyGranted({'USER','ADMIN'})}" icon="pi pi-fw pi-flag">
+                    <p:menuitem rendered="#{p:ifAnyGranted('USER,ADMIN')}" icon="pi pi-fw pi-flag">
                         <p:selectOneMenu value="#{idiomaController.lenguaje}"
                                          valueChangeListener="#{idiomaController.seleccionar}"
                                          onchange="submit()"
@@ -27,6 +27,10 @@
                             <f:selectItems value="#{idiomaController.lenguajesSoportados}"/>
                         </p:selectOneMenu>
                     </p:menuitem>
+
+                    <p:menuitem value="Acceso" outcome="login" icon="pi pi-fw pi-sign-in" rendered="#{empty p:userPrincipal()}"/>
+                    <p:menuitem value="Salir" action="#{logoutController.logout}" icon="pi pi-fw pi-sign-out" rendered="#{not empty p:userPrincipal()}"/>
+
                 </p:menubar>
             </h:form>
             <div class="p-mb-2">
@@ -35,7 +39,8 @@
                         closable="true">
                     <p:autoUpdate />
                 </p:messages>
-                <h:outputText value="Bienvenido: #{p:userPrincipal()}" rendered="#{p:ifAnyGranted({'USER','ADMIN'})}"/>
+                <!--<h:outputText value="Bienvenido: #{p:userPrincipal()}" rendered="#{p:ifAnyGranted('USER,ADMIN')}"/>-->
+                <h:outputText value="Bienvenido: #{p:userPrincipal()}" rendered="#{not empty p:userPrincipal()}"/>
                 <ui:insert name="content"/>
             </div>
             <p:divider/>
